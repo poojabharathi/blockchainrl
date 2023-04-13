@@ -1,12 +1,20 @@
 import numpy as np
 import pandas as pd
-import keras
+#import keras
+#from tensorflow import keras
 from keras.utils import np_utils
 from keras.models import Sequential
 from keras.layers import Conv2D, MaxPooling2D, Dense, Flatten
 import pickle
+#import json
+#import os
 
-train = pd.read_csv('/data/inputs/dataset_shard1.csv')
+# dids = os.getenv("DIDS", None)
+# dids = json.loads(dids)
+
+#filename = f"/data/inputs/{dids}/0"
+
+train = pd.read_csv('dataset_shard1.csv')
 # split the datasets into features and labels
 X_train, y_train = train.iloc[:, 1:].values / 255.0, train.iloc[:, 0].values
 # reshape the input data to 28x28x1 (since MNIST images are grayscale)
@@ -33,7 +41,7 @@ model.fit(X_train, y_train, epochs=2, batch_size=128, verbose=1)
 model_weights = model.get_weights()
 
 #pickle the weights
-with open('/data/outputs/model_weights.pkl', 'wb') as f:
+with open('model_weights.pkl', 'wb') as f:
     pickle.dump(model_weights, f)
 
 
