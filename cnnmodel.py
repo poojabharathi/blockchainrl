@@ -1,20 +1,34 @@
 import numpy as np
 import pandas as pd
-#import keras
+#import keras 
 #from tensorflow import keras
 from keras.utils import np_utils
 from keras.models import Sequential
 from keras.layers import Conv2D, MaxPooling2D, Dense, Flatten
 import pickle
-#import json
-#import os
+import json
+import os
 
-# dids = os.getenv("DIDS", None)
-# dids = json.loads(dids)
+def get_input():
+    local = os.getenv("LOCAL", False)
+    if local:
+        return 'dataset_shard1.csv'
 
-#filename = f"/data/inputs/{dids}/0"
+    dids = os.getenv("DIDS", None)
 
-train = pd.read_csv('dataset_shard1.csv')
+    if not dids:
+        print("No DIDs found in environment. Aborting.")
+        return
+ 
+    dids = json.loads(dids)
+
+    for did in dids:
+        filename = f"data/inputs/{did}/0"  # 0 for metadata service
+        print(f"Reading asset file {filename}.")
+        return filename
+
+filename = get_input()
+train = pd.read_csv(filename)
 # split the datasets into features and labels
 X_train, y_train = train.iloc[:, 1:].values / 255.0, train.iloc[:, 0].values
 # reshape the input data to 28x28x1 (since MNIST images are grayscale)
