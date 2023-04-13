@@ -9,6 +9,7 @@ import pickle
 import json
 import os
 
+print("check point")
 def get_input():
     local = os.getenv("LOCAL", False)
     if local:
